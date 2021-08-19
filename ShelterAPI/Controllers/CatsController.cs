@@ -53,5 +53,11 @@ namespace ShelterAPI.Controllers
       _db.Cats.Add(cat);
       _db.SaveChanges();
     }
+
+    [HttpGet("{id}")]
+    public ActionResult<Cat> Get(int id)
+    {
+      return _db.Cats.FirstOrDefault(entry => entry.CatId == id);
+    }
   }
 }
