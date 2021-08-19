@@ -18,7 +18,7 @@ namespace ShelterAPI.Controllers
       _db = db;
     }
 
-    // GET api/cat
+    // GET api/cats
     [HttpGet]
     public ActionResult<IEnumerable<Cat>> Get(string gender, bool? isKitten) //bool? is nullable bool value
     {
@@ -48,6 +48,7 @@ namespace ShelterAPI.Controllers
       return query.ToList();
     }
 
+    // POST api/cats
     [HttpPost]
     public void Post([FromBody] Cat cat)
     {
@@ -55,12 +56,14 @@ namespace ShelterAPI.Controllers
       _db.SaveChanges();
     }
 
+    // GET api/cats/5
     [HttpGet("{id}")]
     public ActionResult<Cat> Get(int id)
     {
       return _db.Cats.FirstOrDefault(entry => entry.CatId == id);
     }
 
+    // PUT api/cats/5
     [HttpPut("{id}")]
     public void Put(int id, [FromBody] Cat cat)
     {
@@ -69,6 +72,7 @@ namespace ShelterAPI.Controllers
       _db.SaveChanges();
     }
 
+    // DELETE api/cats/5
     [HttpDelete("{id}")]
     public void Delete(int id)
     {
