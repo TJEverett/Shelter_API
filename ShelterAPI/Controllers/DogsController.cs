@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using ShelterAPI.Models;
 
 namespace ShelterAPI.Controllers
@@ -60,6 +61,15 @@ namespace ShelterAPI.Controllers
     public ActionResult<Dog> Get(int id)
     {
       return _db.Dogs.FirstOrDefault(entry => entry.DogId == id);
+    }
+
+    // PUT api/dogs/5
+    [HttpPut("{id}")]
+    public void Put(int id, [FromBody] Dog dog)
+    {
+      dog.DogId = id;
+      _db.Entry(dog).State = EntityState.Modified;
+      _db.SaveChanges();
     }
   }
 }
