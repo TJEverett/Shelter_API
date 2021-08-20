@@ -19,9 +19,32 @@ namespace ShelterAPI.Controllers
 
     // GET api/dogs
     [HttpGet]
-    public ActionResult<IEnumerable<Dog>> Get()
+    public ActionResult<IEnumerable<Dog>> Get(string gender, bool? isPuppy) //bool? is nullable bool value
     {
-      return _db.Dogs.ToList();
+      var query = _db.Dogs.AsQueryable();
+
+      if(gender != null)
+      {
+        if(gender.ToLower() == "male")
+        {
+          query = query.Where(entry => entry.IsFemale == false);
+        }
+        else if(gender.ToLower() == "female")
+        {
+          query = query.Where(entry => entry.IsFemale == true);
+        }
+      }
+
+      if(isPuppy == true)
+      {
+        query = query.Where(entry => DateTime.Compare(entry.Birthday, DateTime.Now.AddYears(-1)) >= 0);
+      }
+      else if(isPuppy == false)
+      {
+        query = query.Where(entry => DateTime.Compare(entry.Birthday, DateTime.Now.AddYears(-1)) <= 0);
+      }
+
+      return query.ToList();
     }
 
     // POST api/dogs
