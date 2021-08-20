@@ -71,5 +71,14 @@ namespace ShelterAPI.Controllers
       _db.Entry(dog).State = EntityState.Modified;
       _db.SaveChanges();
     }
+
+    // DELETE api/dogs/5
+    [HttpDelete("{id}")]
+    public void Delete(int id)
+    {
+      Dog adoptedDog = _db.Dogs.FirstOrDefault(entry => entry.DogId == id);
+      _db.Dogs.Remove(adoptedDog);
+      _db.SaveChanges();
+    }
   }
 }
