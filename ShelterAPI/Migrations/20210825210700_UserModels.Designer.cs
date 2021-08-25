@@ -2,15 +2,17 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using ShelterAPI.Models;
 
 namespace ShelterAPI.Migrations
 {
     [DbContext(typeof(AnimalShelterContext))]
-    partial class AnimalShelterContextModelSnapshot : ModelSnapshot
+    [Migration("20210825210700_UserModels")]
+    partial class UserModels
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -75,14 +77,6 @@ namespace ShelterAPI.Migrations
                     b.HasKey("UserModelId");
 
                     b.ToTable("UserModels");
-
-                    b.HasData(
-                        new
-                        {
-                            UserModelId = 1,
-                            Password = "cat123dog",
-                            Username = "Admin"
-                        });
                 });
 #pragma warning restore 612, 618
         }
