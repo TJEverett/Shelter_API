@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using ShelterAPI.Models;
@@ -19,6 +20,7 @@ namespace ShelterAPI.Controllers
     }
 
     // GET api/dogs
+    [AllowAnonymous]
     [HttpGet]
     public ActionResult<IEnumerable<Dog>> Get(string gender, bool? isPuppy) //bool? is nullable bool value
     {
@@ -49,6 +51,7 @@ namespace ShelterAPI.Controllers
     }
 
     // POST api/dogs
+    [Authorize]
     [HttpPost]
     public void Post([FromBody] Dog dog)
     {
@@ -57,6 +60,7 @@ namespace ShelterAPI.Controllers
     }
 
     // GET api/dogs/5
+    [AllowAnonymous]
     [HttpGet("{id}")]
     public ActionResult<Dog> Get(int id)
     {
@@ -64,6 +68,7 @@ namespace ShelterAPI.Controllers
     }
 
     // PUT api/dogs/5
+    [Authorize]
     [HttpPut("{id}")]
     public void Put(int id, [FromBody] Dog dog)
     {
@@ -73,6 +78,7 @@ namespace ShelterAPI.Controllers
     }
 
     // DELETE api/dogs/5
+    [Authorize]
     [HttpDelete("{id}")]
     public void Delete(int id)
     {
