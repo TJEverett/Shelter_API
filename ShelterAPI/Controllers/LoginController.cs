@@ -61,6 +61,28 @@ namespace ShelterAPI.Controllers
       }
     }
 
+    [Authorize]
+    [HttpDelete("api/login/delete")]
+    public void DeleteUser([FromBody]UserModel login)
+    {
+      var currentUser = HttpContext.User;
+      UserModel loginDuplicate = AuthenticateUser(login);
+
+      var userQuery = _db.UserModels.AsQueryable();
+      UserModel loggedUser = new UserModel() { Username = null, Password = null };
+      if(currentUser.HasClaim(c => c.Type == "Username"))
+      {
+        loggedUser.Username = currentUser.Claims.FirstOrDefault(c => c.Type == "Username").Value;
+        loggedUser = userQuery.FirstOrDefault(entry => entry.Username.ToLower() == loggedUser.Username.ToLower());
+      }
+
+      if(loginDuplicate != null && loggedUser != null)
+      {
+        _db.UserModels.Remove(loginDuplicate);
+        _db.SaveChanges();
+      }
+    }
+
     private string GenerateJSONWebToken(UserModel userInfo)
     {
       var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_config["Jwt:Key"]));
