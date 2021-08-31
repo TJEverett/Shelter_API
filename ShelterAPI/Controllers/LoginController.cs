@@ -78,8 +78,11 @@ namespace ShelterAPI.Controllers
 
       if(loginDuplicate != null && loggedUser != null)
       {
-        _db.UserModels.Remove(loginDuplicate);
-        _db.SaveChanges();
+        if(loginDuplicate.Username.ToLower() != loggedUser.Username.ToLower())
+        {
+          _db.UserModels.Remove(loginDuplicate);
+          _db.SaveChanges();
+        }
       }
     }
 
