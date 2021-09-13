@@ -1,12 +1,12 @@
-# Message Board API
+# Shelter API
 
-#### _Track Animals in a Shelter, 08/31/2021_
+#### _Track Animals in a Shelter, 09/10/2021_
 
 #### By _**Tristen Everett**_
 
 ## Description
 
-123456890
+This project was an attempt at showing the skills I learned to program in C# to Create an API that uses JWT. In this project I built a ASP.NET API that allows users to view and modify a database of dogs and cats that are available for adoption from a shelter. There is also a database of users that is used for the generation of authentication tokens that can be modified by authenticated users, meaning that users can create new logins or delete old logins without need to modify the database manually.
 
 ### Json Web Tokens (Further Exploration)
 
