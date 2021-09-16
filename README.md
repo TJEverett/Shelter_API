@@ -31,6 +31,7 @@ This project was an attempt at showing the skills I learned to program in C# to 
 ### Current Bugs and Usage Limitations
 
 * One default user will be added each time the command `dotnet ef database update` is ran. This user should be deleted after a new user is added to the database, or after each time the command needs to be re-run to keep shelter database secure.
+  * Default user's username is `admin` and password is `cat123dog`
 
 ### API Endpoints
 
