@@ -1,24 +1,56 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore;
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.Logging;
+﻿using ShelterAPI.Models;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
 
-namespace ShelterAPI
-{
-  public class Program
+var builder = WebApplication.CreateBuilder(args);
+
+builder.Services.AddAuthentication(options =>
   {
-    public static void Main(string[] args)
+    options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+    options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+    options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
+  }).AddJwtBearer(o =>
+  {
+    o.TokenValidationParameters = new TokenValidationParameters
     {
-      CreateWebHostBuilder(args).Build().Run();
-    }
+      ValidIssuer = builder.Configuration["Jwt:Issuer"],
+      ValidAudience = builder.Configuration["Jwt:Issuer"],
+      IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"])),
+      ValidateIssuer = true,
+      ValidateAudience = true,
+      ValidateLifetime = true,
+      ValidateIssuerSigningKey = true
+    };
+  });
+builder.Services.AddControllers();
+builder.Services.AddDbContext<AnimalShelterContext>(
+    DbContextOptions => DbContextOptions
+      .UseMySql(
+        builder.Configuration["ConnectionStrings:DefaultConnection"],
+        ServerVersion.AutoDetect(builder.Configuration["ConnectionStrings:DefaultConnection"]
+        )
+      )
+    );
+builder.Services.AddAuthorization();
+builder.Services.AddEndpointsApiExplorer();
+builder.Services.AddSwaggerGen();
 
-    public static IWebHostBuilder CreateWebHostBuilder(string[] args) =>
-      WebHost.CreateDefaultBuilder(args)
-        .UseStartup<Startup>();
-  }
+var app = builder.Build();
+
+if(app.Environment.IsDevelopment()){
+  app.UseSwagger();
+  app.UseSwaggerUI();
 }
+else
+{
+  app.UseHttpsRedirection();
+}
+
+app.UseAuthentication();
+app.UseAuthorization();
+
+app.MapControllers();
+
+app.Run();
