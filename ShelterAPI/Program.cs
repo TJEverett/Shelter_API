@@ -24,6 +24,14 @@ builder.Services.AddAuthentication(options =>
       ValidateIssuerSigningKey = true
     };
   });
+builder.Services.AddCors(options => 
+{
+  options.AddDefaultPolicy(
+    policy =>
+    {
+      policy.AllowAnyOrigin(); //Unsafe (Quick fix for development) - use .WithOrigins()
+    });
+});
 builder.Services.AddControllers();
 builder.Services.AddDbContext<AnimalShelterContext>(
     DbContextOptions => DbContextOptions
@@ -48,6 +56,7 @@ else
   app.UseHttpsRedirection();
 }
 
+app.UseCors();
 app.UseAuthentication();
 app.UseAuthorization();
 
